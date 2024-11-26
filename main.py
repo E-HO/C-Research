@@ -36,7 +36,7 @@ def wikimedia_request(rcontinue = {}) -> None:
 		"rcprop": "title|ids|sizes|timestamp", # What info is provided
 		"rctype": "edit|new",
 		"rcstart": API_FROM_DATE.strftime("%Y-%m-%dT%H:%M:%SZ"),
-		# "rcend": (API_FROM_DATE + timedelta(hours=24)).strftime("%Y-%m-%dT%H:%M:%SZ"), # Empty results when a limit was set !?
+		# "rcend": (API_FROM_DATE + timedelta(hours=API_TIMEDELTA)).strftime("%Y-%m-%dT%H:%M:%SZ"), # Empty results when a limit was set !?
 		"rcdir": "newer",
 		"formatversion": "2",
 		"format": "json"
