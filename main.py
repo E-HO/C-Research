@@ -37,6 +37,8 @@ def wikimedia_request(rcontinue = {}) -> None:
 		"rctype": "edit|new",
 		"rcstart": API_FROM_DATE.strftime("%Y-%m-%dT%H:%M:%SZ"),
 		# "rcend": (API_FROM_DATE + timedelta(hours=API_TIMEDELTA)).strftime("%Y-%m-%dT%H:%M:%SZ"), # Empty results when a limit was set !?
+		# To test API in their sandbox system to check behavior & results :
+		# https://www.mediawiki.org/wiki/Special:ApiSandbox#action=query&format=json&uselang=user&prop=&list=recentchanges&formatversion=2&rcstart=2024-10-31T00%3A00%3A00.000Z&rcnamespace=&rcprop=title%7Ctimestamp%7Cids&rctype=edit%7Cnew
 		"rcdir": "newer",
 		"formatversion": "2",
 		"format": "json"
@@ -50,10 +52,10 @@ def wikimedia_request(rcontinue = {}) -> None:
 	# 	print(page)
 
 	# Pandas could be excessive here, but quick step to save data, and let's imagine some manipulations must be done at source ...
-	# as like here a tricky example to filter something which should have be filtered at source side
+	# as like here a tricky example to filter something which should have be filtered at source side : the dates limited to something and not full set since.
 	df = pd.DataFrame(data=changes)
 	# print(df.info)
-	df = df.query('timestamp.str.contains("'+API_FROM_DATE.strftime("%Y-%m-%d")+'")')
+	df = df.query('timestamp.str.contains("'+API_FROM_DATE.strftime("%Y-%m-%d")+'")') # Filter dates, not great but a fix to something not working as expected
 	df.to_sql(con=engine, name='wikimedia_changes', if_exists='append')
 
 	if (data.get("continue")):
